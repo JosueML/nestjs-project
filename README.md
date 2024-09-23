@@ -1,73 +1,94 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# NestJS Project
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Este es un proyecto basado en NestJS que incluye manejo de variables de entorno, autenticación y autorización. La configuración y validación de las variables de entorno se realizan a través del módulo `ConfigModule`, y el proyecto usa `Yarn` como gestor de paquetes.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Requisitos
 
-## Description
+-   Node.js
+-   Yarn
+-   Nest CLI (opcional)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Instalación
 
-## Installation
+1. Clonar el repositorio:
 
-```bash
-$ yarn install
+    git clone https://github.com/JosueML/nestjs-project.git
+
+2. Entrar en la carpeta del proyecto:
+
+    cd nestjs-project
+
+3. Instalar las dependencias utilizando Yarn:
+
+    yarn install
+
+## Configuración de variables de entorno
+
+Este proyecto maneja las variables de entorno a través de un archivo `.env` ubicado en la raíz del proyecto. Asegúrate de crear un archivo `.env` basado en el archivo de ejemplo `.env.template`:
+
+1. Copia el archivo `.env.template` a `.env`:
+
+    cp .env.template .env
+
+2. Rellena los valores correspondientes en el archivo `.env`.
+
+Las variables de entorno se gestionan a través de los siguientes archivos:
+
+-   `env.config.ts`: Carga las variables del archivo `.env`.
+-   `env.validation.ts`: Usa Joi para validar el esquema de las variables de entorno.
+
+## Scripts
+
+### Ejecutar la aplicación
+
+Para iniciar la aplicación en desarrollo, usa el siguiente comando:
+
+yarn start:dev
+
+Esto levantará el servidor en modo desarrollo.
+
+### Construir la aplicación
+
+Para construir la aplicación para producción:
+
+yarn build
+
+### Ejecutar en producción
+
+Después de construir el proyecto, puedes ejecutarlo en modo producción con:
+
+yarn start:prod
+
+### Pruebas
+
+Para ejecutar las pruebas:
+
+yarn test
+
+## Autenticación y Autorización
+
+Este proyecto incluye un módulo de autenticación y autorización. La protección de rutas se realiza mediante el decorador `@Auth()`, el cual asegura que la ruta requiere autenticación.
+
+### Ejemplo de uso del decorador `@Auth()`
+
+#### Rutas protegidas por autenticación básica:
+
+```typescript
+@Get('protected')
+@Auth()
+getProtectedData() {
+  return 'Solo usuarios autenticados pueden acceder a esta ruta';
+}
 ```
 
-## Running the app
+#### Rutas protegidas con roles específicos:
 
-```bash
-# development
-$ yarn run start
+El decorador `@Auth()` acepta roles definidos en el `enum ValidRoles`. Por ejemplo, para proteger una ruta y asegurarse de que solo los usuarios con el rol de `admin` puedan acceder, se utiliza de la siguiente manera:
 
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
+```typescript
+@Get('admin')
+@Auth(ValidRoles.admin)
+getAdminData() {
+  return 'Solo administradores pueden acceder a esta ruta';
+}
 ```
-
-## Test
-
-```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
